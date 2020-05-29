@@ -7,10 +7,13 @@ const app = new Koa();
 
 const setupRoutes = (localeConfig) => {
   // Have some check to prevent duplicate routes
-  localeConfig.forEach((locale) => {
-    locale.routes.forEach((route) => {
+  localeConfig.forEach((opt) => {
+    // Adding prefix according to option
+    const localePrefix = opt.prefix ? `/${opt.locale}` : "";
+    opt.routes.forEach((route) => {
+      const path = `${localePrefix}${route.path}`;
       router[route.method.toLowerCase()].apply(router, [
-        route.path,
+        path,
         ...route.controllers,
       ]);
     });
